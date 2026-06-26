@@ -68,6 +68,16 @@
                             <label for="profileAbout">关于我</label>
                             <textarea id="profileAbout" name="about" rows="4"></textarea>
                         </div>
+                        <div class="form-group">
+                            <label>顶部背景图片</label>
+                            <div class="thumbnail-upload">
+                                <input type="file" id="heroImageInput" accept="image/*" style="display:none">
+                                <button type="button" class="btn btn-outline btn-sm" id="uploadHeroBtn">选择图片</button>
+                                <span id="heroImageFileName" class="thumbnail-filename">未选择文件</span>
+                            </div>
+                            <div id="heroImagePreview" class="thumbnail-preview"></div>
+                            <input type="hidden" id="heroImage" name="heroImage">
+                        </div>
                         <button type="button" class="btn btn-primary" id="saveProfileBtn">保存修改</button>
                     </form>
                 </div>

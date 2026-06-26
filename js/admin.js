@@ -25,6 +25,11 @@
         toolsList: document.getElementById('toolsList'),
         addToolBtn: document.getElementById('addToolBtn'),
         saveProfileBtn: document.getElementById('saveProfileBtn'),
+        heroImageInput: document.getElementById('heroImageInput'),
+        uploadHeroBtn: document.getElementById('uploadHeroBtn'),
+        heroImageFileName: document.getElementById('heroImageFileName'),
+        heroImagePreview: document.getElementById('heroImagePreview'),
+        heroImage: document.getElementById('heroImage'),
         sectionProfile: document.getElementById('sectionProfile'),
         sectionTools: document.getElementById('sectionTools'),
         sectionProject: document.getElementById('sectionProject'),
@@ -133,6 +138,28 @@
 
         els.saveProfileBtn.addEventListener('click', function() {
             saveProfile();
+        });
+
+        els.uploadHeroBtn.addEventListener('click', function() {
+            els.heroImageInput.click();
+        });
+
+        els.heroImageInput.addEventListener('change', function(e) {
+            var file = e.target.files[0];
+            if (file) {
+                if (file.size > 1000 * 1024) {
+                    showToast('图片大小不能超过 1MB');
+                    return;
+                }
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    els.heroImage.value = event.target.result;
+                    els.heroImageFileName.textContent = file.name;
+                    els.heroImagePreview.innerHTML = '<img src="' + event.target.result + '" alt="预览">';
+                    markChanged();
+                };
+                reader.readAsDataURL(file);
+            }
         });
 
         els.profileName.addEventListener('input', markChanged);
@@ -266,6 +293,16 @@
         els.profileName.value = data.profile.name || '';
         els.profileTagline.value = data.profile.tagline || '';
         els.profileAbout.value = data.profile.about || '';
+
+        if (data.heroImage) {
+            els.heroImage.value = data.heroImage;
+            els.heroImageFileName.textContent = data.heroImage.includes('data:') ? '已上传图片' : data.heroImage;
+            els.heroImagePreview.innerHTML = '<img src="' + data.heroImage + '" alt="预览">';
+        } else {
+            els.heroImageFileName.textContent = '未选择文件';
+            els.heroImagePreview.innerHTML = '';
+        }
+        els.heroImageInput.value = '';
     }
 
     function renderTools() {
@@ -276,6 +313,7 @@
             item.innerHTML =
                 '<input type="text" placeholder="工具名称" value="' + escapeAttr(tool.name) + '" data-index="' + i + '" data-field="name">' +
                 '<input type="text" placeholder="图标标识" value="' + escapeAttr(tool.icon) + '" data-index="' + i + '" data-field="icon">' +
+                '<input type="url" placeholder="官网链接" value="' + escapeAttr(tool.url || '') + '" data-index="' + i + '" data-field="url">' +
                 '<button type="button" class="tool-remove-btn" data-index="' + i + '">&times;</button>';
             els.toolsList.appendChild(item);
         });
@@ -373,6 +411,7 @@
         data.profile.name = els.profileName.value.trim();
         data.profile.tagline = els.profileTagline.value.trim();
         data.profile.about = els.profileAbout.value.trim();
+        data.heroImage = els.heroImage.value.trim();
         markChanged();
         showToast('个人资料已保存');
     }

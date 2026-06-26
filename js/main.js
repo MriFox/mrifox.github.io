@@ -8,9 +8,9 @@ const fallbackData = {
     "about": "我是 Fox，一个正在用 AI 把想法变成现实的探索者。\n这里记录我从零开始，一步步用 AI 工具做出真实产品的过程。\n每次项目都是一次学习，不完美，但真实。"
   },
   "tools": [
-    { "name": "MiMo Chat", "icon": "mimo-chat.png" },
-    { "name": "MiMo Code", "icon": "mimo-code.png" },
-    { "name": "GitHub", "icon": "github.png" }
+    { "name": "MiMo Chat", "icon": "mimo-chat.png", "url": "https://aistudio.xiaomimimo.com" },
+    { "name": "MiMo Code", "icon": "mimo-code.png", "url": "https://mimo.xiaomi.com/coder" },
+    { "name": "GitHub", "icon": "github.png", "url": "https://github.com" }
   ],
   "projects": [
     {
@@ -99,13 +99,19 @@ function renderProfile() {
     document.getElementById('profileName').textContent = name;
     document.getElementById('profileTagline').textContent = tagline;
     document.getElementById('profileAbout').innerHTML = about.replace(/\n/g, '<br>');
+
+    if (appData.heroImage) {
+        document.getElementById('avatarImg').src = appData.heroImage;
+    }
 }
 
 function renderTimeline() {
     if (!appData?.projects) return;
     const container = document.getElementById('timeline');
 
-    container.innerHTML = appData.projects.map(project => `
+    const sorted = [...appData.projects].sort((a, b) => b.date.localeCompare(a.date));
+
+    container.innerHTML = sorted.map(project => `
         <div class="timeline-item">
             <div class="timeline-date">${formatDate(project.date)}</div>
             <div class="timeline-title">${project.title}</div>
@@ -118,7 +124,9 @@ function renderWorks() {
     if (!appData?.projects) return;
     const container = document.getElementById('worksGrid');
 
-    container.innerHTML = appData.projects.map(project => `
+    const sorted = [...appData.projects].sort((a, b) => b.date.localeCompare(a.date));
+
+    container.innerHTML = sorted.map(project => `
         <div class="card work-card" data-project-id="${project.id}">
             <div class="card-thumbnail">
                 ${project.thumbnail
@@ -150,14 +158,14 @@ function renderWorks() {
 function renderTools() {
     if (!appData?.tools) return;
     const container = document.getElementById('toolsGrid');
-    
+
     container.innerHTML = appData.tools.map(tool => `
-        <div class="card tool-card">
+        <a href="${tool.url || '#'}" target="_blank" rel="noopener noreferrer" class="card tool-card">
             <div class="tool-icon">
                 <img src="assets/icons/${tool.icon}" alt="${tool.name}" onerror="this.style.display='none'">
             </div>
             <div class="tool-name">${tool.name}</div>
-        </div>
+        </a>
     `).join('');
 }
 

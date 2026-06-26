@@ -356,8 +356,8 @@ section:nth-child(even) {
 }
 
 .tool-card {
-    cursor: default;
-    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
 }
 
 .card:hover {
