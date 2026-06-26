@@ -303,9 +303,16 @@ section:nth-child(even) {
     transform: translateY(-2px);
 }
 
+.card {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+}
+
 .card-thumbnail {
-    width: 100%;
-    aspect-ratio: 1;
+    width: 120px;
+    min-height: 120px;
+    flex-shrink: 0;
     background: var(--color-bg-secondary);
     display: flex;
     align-items: center;
@@ -326,7 +333,11 @@ section:nth-child(even) {
 }
 
 .card-content {
+    flex: 1;
     padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .card-title {
@@ -532,6 +543,15 @@ footer {
     .works-grid,
     .tools-grid {
         grid-template-columns: 1fr;
+    }
+
+    .card {
+        flex-direction: column;
+    }
+
+    .card-thumbnail {
+        width: 100%;
+        min-height: 160px;
     }
 }
 
