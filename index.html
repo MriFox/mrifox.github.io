@@ -85,6 +85,27 @@
         </div>
     </footer>
 
+    <div class="modal-overlay" id="workModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose" aria-label="关闭">&times;</button>
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle"></h3>
+                <div class="modal-tags" id="modalTags"></div>
+            </div>
+            <div class="modal-tools">
+                <span class="modal-tools-label">使用的 AI 工具：</span>
+                <span class="modal-tools-list" id="modalTools"></span>
+            </div>
+            <div class="modal-readme" id="modalReadme">
+                <div class="modal-loading">加载 README 中...</div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" id="modalGithub" href="#" target="_blank" rel="noopener noreferrer">在 GitHub 查看</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="js/theme.js"></script>
     <script src="js/main.js"></script>
     <script src="js/cursor.js"></script>

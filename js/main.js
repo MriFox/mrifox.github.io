@@ -1,9 +1,11 @@
 let appData = null;
+let readmeCache = {};
 
 document.addEventListener('DOMContentLoaded', () => {
     loadData();
     initMobileMenu();
     initScrollNav();
+    initModal();
 });
 
 async function loadData() {
@@ -44,9 +46,9 @@ function renderTimeline() {
 function renderWorks() {
     if (!appData?.projects) return;
     const container = document.getElementById('worksGrid');
-    
+
     container.innerHTML = appData.projects.map(project => `
-        <div class="card work-card" data-github="${project.github}">
+        <div class="card work-card" data-project-id="${project.id}">
             <div class="card-title">${project.title}</div>
             <div class="card-tagline">${project.tagline}</div>
             <div class="card-meta">
@@ -55,12 +57,13 @@ function renderWorks() {
             </div>
         </div>
     `).join('');
-    
+
     container.addEventListener('click', (e) => {
         const card = e.target.closest('.work-card');
         if (card) {
-            const github = card.dataset.github;
-            if (github) window.open(github, '_blank');
+            const projectId = parseInt(card.dataset.projectId);
+            const project = appData.projects.find(p => p.id === projectId);
+            if (project) openModal(project);
         }
     });
 }
@@ -124,7 +127,7 @@ function initScrollNav() {
     const nav = document.getElementById('navbar');
     let lastScroll = 0;
     let ticking = false;
-    
+
     window.addEventListener('scroll', () => {
         if (!ticking) {
             window.requestAnimationFrame(() => {
@@ -140,4 +143,84 @@ function initScrollNav() {
             ticking = true;
         }
     });
+}
+
+function initModal() {
+    const overlay = document.getElementById('workModal');
+    const closeBtn = document.getElementById('modalClose');
+
+    closeBtn.addEventListener('click', closeModal);
+
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.classList.contains('active')) {
+            closeModal();
+        }
+    });
+}
+
+function openModal(project) {
+    const overlay = document.getElementById('workModal');
+    const title = document.getElementById('modalTitle');
+    const tags = document.getElementById('modalTags');
+    const tools = document.getElementById('modalTools');
+    const readme = document.getElementById('modalReadme');
+    const github = document.getElementById('modalGithub');
+
+    title.textContent = project.title;
+    tags.innerHTML = `<span class="tag">${project.category}</span>`;
+    tools.textContent = project.tools.join(', ');
+    github.href = project.github;
+
+    readme.innerHTML = '<div class="modal-loading">加载 README 中...</div>';
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    loadReadme(project.github, readme);
+}
+
+function closeModal() {
+    const overlay = document.getElementById('workModal');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+async function loadReadme(githubUrl, container) {
+    const repoMatch = githubUrl.match(/github\.com\/([^/]+)\/([^/]+)/);
+    if (!repoMatch) {
+        container.innerHTML = '<div class="modal-readme-content"><p>无法解析仓库地址</p></div>';
+        return;
+    }
+
+    const [, owner, repo] = repoMatch;
+    const cacheKey = `${owner}/${repo}`;
+
+    if (readmeCache[cacheKey]) {
+        renderReadme(readmeCache[cacheKey], container);
+        return;
+    }
+
+    try {
+        const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`);
+        if (!response.ok) {
+            throw new Error('README not found');
+        }
+        const data = await response.json();
+        const content = atob(data.content.replace(/\n/g, ''));
+        readmeCache[cacheKey] = content;
+        renderReadme(content, container);
+    } catch (error) {
+        container.innerHTML = '<div class="modal-readme-content"><p>暂无 README 内容</p></div>';
+    }
+}
+
+function renderReadme(markdown, container) {
+    if (typeof marked !== 'undefined') {
+        container.innerHTML = `<div class="modal-readme-content">${marked.parse(markdown)}</div>`;
+    } else {
+        container.innerHTML = `<div class="modal-readme-content"><pre>${markdown}</pre></div>`;
+    }
 }
