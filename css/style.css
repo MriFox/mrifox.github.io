@@ -222,6 +222,7 @@ nav.hide {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    padding-top: 72px;
 }
 
 .hero-bg {
@@ -767,8 +768,9 @@ footer {
     }
 
     #hero {
-        height: 40vh;
-        min-height: 320px;
+        height: 45vh;
+        min-height: 350px;
+        padding-top: 72px;
     }
 
     .hero-content h1 {
@@ -781,6 +783,7 @@ footer {
 
     .hero-about {
         font-size: 0.9rem;
+        padding: 0 1rem;
     }
 
     section {
