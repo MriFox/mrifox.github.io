@@ -11,6 +11,7 @@
 html {
     scroll-behavior: smooth;
     scroll-padding-top: 64px;
+    scroll-snap-type: y mandatory;
 }
 
 :root {
@@ -197,6 +198,7 @@ nav.hide {
     padding: 8rem 0 4rem;
     text-align: center;
     background: var(--color-bg-secondary);
+    overflow: hidden;
 }
 
 .hero-content h1 {
@@ -212,6 +214,11 @@ nav.hide {
 
 section {
     padding: 4rem 0;
+    scroll-snap-align: start;
+}
+
+#hero {
+    scroll-snap-align: start;
 }
 
 section:nth-child(even) {
@@ -428,6 +435,9 @@ footer {
 }
 
 @media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-snap-type: none;
+    }
     .cursor-glow {
         display: none;
     }
@@ -436,6 +446,12 @@ footer {
     }
     .work-card:hover {
         transform: none;
+    }
+    #particleCanvas {
+        display: none;
+    }
+    [data-parallax] {
+        transform: none !important;
     }
 }
 
