@@ -411,19 +411,6 @@ footer {
     font-size: 0.875rem;
 }
 
-.cursor-glow {
-    position: fixed;
-    width: 320px;
-    height: 320px;
-    border-radius: 50%;
-    pointer-events: none;
-    background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 70%);
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
 .work-card {
     transition: transform 0.15s ease, box-shadow var(--transition);
     will-change: transform;
@@ -443,9 +430,6 @@ footer {
     }
     html {
         scroll-snap-type: none;
-    }
-    .cursor-glow {
-        display: none;
     }
     .work-card {
         transition: none;
@@ -518,10 +502,6 @@ footer {
     .works-grid,
     .tools-grid {
         grid-template-columns: 1fr;
-    }
-
-    .cursor-glow {
-        display: none;
     }
 }
 
