@@ -7,6 +7,7 @@
   "tools": [
     { "name": "ChatGPT", "icon": "chatgpt" },
     { "name": "Claude", "icon": "claude" },
+    { "name": "MiMo Code", "icon": "mimo" },
     { "name": "Cursor", "icon": "cursor" },
     { "name": "GitHub", "icon": "github" },
     { "name": "VS Code", "icon": "vscode" }
@@ -15,57 +16,57 @@
     {
       "id": 1,
       "title": "基金投资分析网页",
-      "tagline": "一句话描述，待站长填写",
+      "tagline": "我的第一个AI作品，用ChatGPT做出的基金数据分析页面",
       "category": "Web App",
       "tools": ["ChatGPT"],
-      "github": "https://github.com/Mr_iFox/项目仓库名",
+      "github": "",
       "date": "2025-01",
       "thumbnail": "",
-      "journeyNote": "一句话学习感悟，待站长填写"
+      "journeyNote": "第一次尝试用AI写代码，虽然简陋，但迈出了第一步"
     },
     {
       "id": 2,
       "title": "基金回本测算工具",
-      "tagline": "待填写",
+      "tagline": "帮我算算基金回本需要涨多少",
       "category": "工具",
       "tools": ["ChatGPT"],
-      "github": "https://github.com/Mr_iFox/项目仓库名",
+      "github": "",
       "date": "2025-02",
       "thumbnail": "",
-      "journeyNote": "待填写"
+      "journeyNote": "开始理解如何把需求转化成代码，AI让我少走了很多弯路"
     },
     {
       "id": 3,
-      "title": "羊了个羊小游戏（模仿）",
-      "tagline": "待填写",
+      "title": "羊了个羊小游戏",
+      "tagline": "模仿热门小游戏，挑战三消玩法",
       "category": "游戏",
       "tools": ["ChatGPT"],
-      "github": "https://github.com/Mr_iFox/项目仓库名",
+      "github": "",
       "date": "2025-03",
       "thumbnail": "",
-      "journeyNote": "待填写"
+      "journeyNote": "从静态页面到交互游戏，感受到了AI辅助开发的效率"
     },
     {
       "id": 4,
-      "title": "小米 mini code 教程网页",
-      "tagline": "待填写",
+      "title": "MiMo Code 教程",
+      "tagline": "从零开始学习AI编程助手MiMo Code",
       "category": "教程",
-      "tools": ["ChatGPT"],
-      "github": "https://github.com/Mr_iFox/项目仓库名",
+      "tools": ["MiMo Code"],
+      "github": "https://github.com/Mr_iFox/mimo-tutorial",
       "date": "2025-04",
       "thumbnail": "",
-      "journeyNote": "待填写"
+      "journeyNote": "第一次用MiMo Code做项目，体验比ChatGPT更流畅"
     },
     {
       "id": 5,
-      "title": "Git 和 GitHub 科普教程网页",
-      "tagline": "待填写",
+      "title": "Git 和 GitHub 科普教程",
+      "tagline": "给新手看的Git入门指南",
       "category": "教程",
-      "tools": ["ChatGPT"],
-      "github": "https://github.com/Mr_iFox/项目仓库名",
+      "tools": ["MiMo Code"],
+      "github": "https://github.com/Mr_iFox/git-tutorial",
       "date": "2025-05",
       "thumbnail": "",
-      "journeyNote": "待填写"
+      "journeyNote": "边学边教，把Git知识整理成网页，也巩固了自己的理解"
     }
   ]
 }
