@@ -154,7 +154,7 @@ function renderTools() {
     container.innerHTML = appData.tools.map(tool => `
         <div class="card tool-card">
             <div class="tool-icon">
-                <img src="assets/icons/${tool.icon}.svg" alt="${tool.name}" onerror="this.style.display='none'">
+                <img src="assets/icons/${tool.icon}" alt="${tool.name}" onerror="this.style.display='none'">
             </div>
             <div class="tool-name">${tool.name}</div>
         </div>
