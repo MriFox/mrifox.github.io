@@ -107,8 +107,14 @@
                             <input type="text" id="projectDate" name="date" placeholder="2025-01">
                         </div>
                         <div class="form-group">
-                            <label for="projectThumbnail">缩略图链接</label>
-                            <input type="url" id="projectThumbnail" name="thumbnail">
+                            <label>缩略图</label>
+                            <div class="thumbnail-upload">
+                                <input type="file" id="projectThumbnailInput" accept="image/*" style="display:none">
+                                <button type="button" class="btn btn-outline btn-sm" id="uploadThumbnailBtn">选择图片</button>
+                                <span id="thumbnailFileName" class="thumbnail-filename">未选择文件</span>
+                            </div>
+                            <div id="thumbnailPreview" class="thumbnail-preview"></div>
+                            <input type="hidden" id="projectThumbnail" name="thumbnail">
                         </div>
                         <div class="form-group">
                             <label for="projectNote">学习感悟</label>

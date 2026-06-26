@@ -38,6 +38,10 @@
         projectGithub: document.getElementById('projectGithub'),
         projectDate: document.getElementById('projectDate'),
         projectThumbnail: document.getElementById('projectThumbnail'),
+        projectThumbnailInput: document.getElementById('projectThumbnailInput'),
+        uploadThumbnailBtn: document.getElementById('uploadThumbnailBtn'),
+        thumbnailFileName: document.getElementById('thumbnailFileName'),
+        thumbnailPreview: document.getElementById('thumbnailPreview'),
         projectNote: document.getElementById('projectNote'),
         deleteProjectBtn: document.getElementById('deleteProjectBtn'),
         tokenModal: document.getElementById('tokenModal'),
@@ -97,6 +101,28 @@
         });
         els.deleteProjectBtn.addEventListener('click', function() {
             deleteProject();
+        });
+
+        els.uploadThumbnailBtn.addEventListener('click', function() {
+            els.projectThumbnailInput.click();
+        });
+
+        els.projectThumbnailInput.addEventListener('change', function(e) {
+            var file = e.target.files[0];
+            if (file) {
+                if (file.size > 500 * 1024) {
+                    showToast('图片大小不能超过 500KB');
+                    return;
+                }
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    els.projectThumbnail.value = event.target.result;
+                    els.thumbnailFileName.textContent = file.name;
+                    els.thumbnailPreview.innerHTML = '<img src="' + event.target.result + '" alt="预览">';
+                    markChanged();
+                };
+                reader.readAsDataURL(file);
+            }
         });
 
         els.addToolBtn.addEventListener('click', function() {
@@ -303,6 +329,15 @@
         els.projectDate.value = project.date || '';
         els.projectThumbnail.value = project.thumbnail || '';
         els.projectNote.value = project.journeyNote || '';
+
+        if (project.thumbnail) {
+            els.thumbnailFileName.textContent = project.thumbnail.includes('data:') ? '已上传图片' : project.thumbnail;
+            els.thumbnailPreview.innerHTML = '<img src="' + project.thumbnail + '" alt="预览">';
+        } else {
+            els.thumbnailFileName.textContent = '未选择文件';
+            els.thumbnailPreview.innerHTML = '';
+        }
+        els.projectThumbnailInput.value = '';
 
         document.querySelectorAll('.sidebar-item').forEach(function(btn) {
             btn.classList.remove('active');
