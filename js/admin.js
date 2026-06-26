@@ -172,9 +172,9 @@
                 "about": "我是 Fox，一个正在用 AI 把想法变成现实的探索者。\n这里记录我从零开始，一步步用 AI 工具做出真实产品的过程。\n每次项目都是一次学习，不完美，但真实。"
             },
             "tools": [
-                { "name": "MiMo Chat", "icon": "mimo-chat" },
-                { "name": "MiMo Code", "icon": "mimo-code" },
-                { "name": "GitHub", "icon": "github" }
+                { "name": "MiMo Chat", "icon": "mimo-chat.png" },
+                { "name": "MiMo Code", "icon": "mimo-code.png" },
+                { "name": "GitHub", "icon": "github.png" }
             ],
             "projects": [
                 {
