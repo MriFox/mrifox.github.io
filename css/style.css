@@ -542,12 +542,6 @@ footer {
     .work-card:hover {
         transform: none;
     }
-    #particleCanvas {
-        display: none;
-    }
-    [data-parallax] {
-        transform: none !important;
-    }
     .modal-content {
         transform: none;
         transition: none;
