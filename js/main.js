@@ -327,6 +327,14 @@ async function loadReadme(githubUrl, container) {
             throw new Error('README not found');
         }
         const data = await response.json();
+        const base64 = data.content.replace(/\n/g, '');
+        const content = decodeURIComponent(escape(atob(base64)));
+        readmeCache[cacheKey] = content;
+        renderReadme(content, container);
+    } catch (error) {
+        container.innerHTML = '<div class="modal-readme-content"><p>加载 README 失败</p></div>';
+    }
+        const data = await response.json();
         const content = atob(data.content.replace(/\n/g, ''));
         readmeCache[cacheKey] = content;
         renderReadme(content, container);
