@@ -196,8 +196,8 @@ nav.hide {
 
 #hero {
     position: relative;
-    height: 45vh;
-    min-height: 320px;
+    height: 40vh;
+    min-height: 280px;
     display: flex;
     align-items: center;
     justify-content: center;
