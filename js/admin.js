@@ -505,7 +505,12 @@
             }
         })
         .then(function(res) {
-            if (!res.ok) throw new Error('获取文件 SHA 失败');
+            if (!res.ok) {
+                if (res.status === 401) throw new Error('Token 无效或已过期');
+                if (res.status === 404) throw new Error('文件不存在，请先手动创建');
+                if (res.status === 403) throw new Error('Token 权限不足，需要 repo 权限');
+                throw new Error('获取文件 SHA 失败 (状态码: ' + res.status + ')');
+            }
             return res.json();
         })
         .then(function(fileData) {
