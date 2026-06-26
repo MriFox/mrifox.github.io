@@ -216,13 +216,12 @@ nav.hide {
 /* Hero Section */
 #hero {
     position: relative;
-    height: 45vh;
-    min-height: 380px;
+    height: 50vh;
+    min-height: 420px;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    padding-top: 72px;
 }
 
 .hero-bg {
@@ -259,6 +258,7 @@ nav.hide {
     color: white;
     max-width: 600px;
     padding: 2rem;
+    margin-top: 72px;
 }
 
 .hero-content h1 {
@@ -768,9 +768,12 @@ footer {
     }
 
     #hero {
-        height: 45vh;
-        min-height: 350px;
-        padding-top: 72px;
+        height: 50vh;
+        min-height: 400px;
+    }
+
+    .hero-content {
+        margin-top: 72px;
     }
 
     .hero-content h1 {
