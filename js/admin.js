@@ -24,6 +24,7 @@
         profileAbout: document.getElementById('profileAbout'),
         toolsList: document.getElementById('toolsList'),
         addToolBtn: document.getElementById('addToolBtn'),
+        saveProfileBtn: document.getElementById('saveProfileBtn'),
         sectionProfile: document.getElementById('sectionProfile'),
         sectionTools: document.getElementById('sectionTools'),
         sectionProject: document.getElementById('sectionProject'),
@@ -102,6 +103,10 @@
             data.tools.push({ name: '', icon: '' });
             renderTools();
             markChanged();
+        });
+
+        els.saveProfileBtn.addEventListener('click', function() {
+            saveProfile();
         });
 
         els.profileName.addEventListener('input', markChanged);
@@ -327,6 +332,14 @@
         selectProject(newProject.id);
         markChanged();
         showToast('已创建新项目 #' + newProject.id);
+    }
+
+    function saveProfile() {
+        data.profile.name = els.profileName.value.trim();
+        data.profile.tagline = els.profileTagline.value.trim();
+        data.profile.about = els.profileAbout.value.trim();
+        markChanged();
+        showToast('个人资料已保存');
     }
 
     function saveProject() {
