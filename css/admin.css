@@ -66,7 +66,7 @@
     z-index: 100;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     height: 56px;
     padding: 0 1.5rem;
     background: rgba(255, 255, 255, 0.8);
@@ -144,6 +144,15 @@
     height: calc(100vh - 56px);
     position: sticky;
     top: 56px;
+}
+
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
 }
 
 .sidebar-section {
