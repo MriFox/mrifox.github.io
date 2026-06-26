@@ -135,19 +135,100 @@
 
     function loadData() {
         fetch(DATA_PATH + '?t=' + Date.now())
-            .then(function(res) { return res.json(); })
+            .then(function(res) {
+                if (!res.ok) throw new Error('Network error');
+                return res.json();
+            })
             .then(function(json) {
                 data = json;
-                renderProfile();
-                renderTools();
-                renderProjectList();
-                if (data.projects.length > 0) {
-                    selectProject(data.projects[0].id);
-                }
+                renderAll();
             })
             .catch(function(err) {
-                showToast('加载数据失败');
+                console.warn('无法加载 projects.json，使用内置数据');
+                data = getFallbackData();
+                renderAll();
             });
+    }
+
+    function renderAll() {
+        renderProfile();
+        renderTools();
+        renderProjectList();
+        if (data.projects.length > 0) {
+            selectProject(data.projects[0].id);
+        }
+    }
+
+    function getFallbackData() {
+        return {
+            "profile": {
+                "name": "Mr_iFox",
+                "tagline": "用 AI 把想法变成现实",
+                "about": "我是 Fox，一个正在用 AI 把想法变成现实的探索者。\n这里记录我从零开始，一步步用 AI 工具做出真实产品的过程。\n每次项目都是一次学习，不完美，但真实。"
+            },
+            "tools": [
+                { "name": "MiMo Chat", "icon": "mimo-chat" },
+                { "name": "MiMo Code", "icon": "mimo-code" },
+                { "name": "GitHub", "icon": "github" }
+            ],
+            "projects": [
+                {
+                    "id": 1,
+                    "title": "Git 和 GitHub 科普教程",
+                    "tagline": "给新手看的Git入门指南",
+                    "category": "教程",
+                    "tools": ["MiMo Code"],
+                    "github": "https://github.com/Mr_iFox/git-tutorial",
+                    "date": "2025-05",
+                    "thumbnail": "assets/thumbnails/project1.svg",
+                    "journeyNote": "边学边教，把Git知识整理成网页，也巩固了自己的理解"
+                },
+                {
+                    "id": 2,
+                    "title": "MiMo Code 教程",
+                    "tagline": "从零开始学习AI编程助手MiMo Code",
+                    "category": "教程",
+                    "tools": ["MiMo Code"],
+                    "github": "https://github.com/Mr_iFox/mimo-tutorial",
+                    "date": "2025-04",
+                    "thumbnail": "assets/thumbnails/project2.svg",
+                    "journeyNote": "第一次用MiMo Code做项目，体验比ChatGPT更流畅"
+                },
+                {
+                    "id": 3,
+                    "title": "羊了个羊小游戏",
+                    "tagline": "模仿热门小游戏，挑战三消玩法",
+                    "category": "游戏",
+                    "tools": ["ChatGPT"],
+                    "github": "",
+                    "date": "2025-03",
+                    "thumbnail": "assets/thumbnails/project3.svg",
+                    "journeyNote": "从静态页面到交互游戏，感受到了AI辅助开发的效率"
+                },
+                {
+                    "id": 4,
+                    "title": "基金回本测算工具",
+                    "tagline": "帮我算算基金回本需要涨多少",
+                    "category": "工具",
+                    "tools": ["ChatGPT"],
+                    "github": "",
+                    "date": "2025-02",
+                    "thumbnail": "assets/thumbnails/project4.svg",
+                    "journeyNote": "开始理解如何把需求转化成代码，AI让我少走了很多弯路"
+                },
+                {
+                    "id": 5,
+                    "title": "基金投资分析网页",
+                    "tagline": "我的第一个AI作品，用ChatGPT做出的基金数据分析页面",
+                    "category": "Web App",
+                    "tools": ["ChatGPT"],
+                    "github": "",
+                    "date": "2025-01",
+                    "thumbnail": "assets/thumbnails/project5.svg",
+                    "journeyNote": "第一次尝试用AI写代码，虽然简陋，但迈出了第一步"
+                }
+            ]
+        };
     }
 
     function renderProfile() {
