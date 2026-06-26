@@ -1,0 +1,452 @@
+(function() {
+    const ADMIN_PASSWORD = 'mrifox2025';
+    const DATA_PATH = 'data/projects.json';
+
+    let data = null;
+    let currentSection = 'profile';
+    let editingProjectId = null;
+    let hasChanges = false;
+
+    const els = {
+        loginOverlay: document.getElementById('loginOverlay'),
+        adminApp: document.getElementById('adminApp'),
+        passwordInput: document.getElementById('passwordInput'),
+        loginBtn: document.getElementById('loginBtn'),
+        loginError: document.getElementById('loginError'),
+        tokenStatus: document.getElementById('tokenStatus'),
+        configTokenBtn: document.getElementById('configTokenBtn'),
+        saveBtn: document.getElementById('saveBtn'),
+        logoutBtn: document.getElementById('logoutBtn'),
+        projectList: document.getElementById('projectList'),
+        addProjectBtn: document.getElementById('addProjectBtn'),
+        profileName: document.getElementById('profileName'),
+        profileTagline: document.getElementById('profileTagline'),
+        profileAbout: document.getElementById('profileAbout'),
+        toolsList: document.getElementById('toolsList'),
+        addToolBtn: document.getElementById('addToolBtn'),
+        sectionProfile: document.getElementById('sectionProfile'),
+        sectionTools: document.getElementById('sectionTools'),
+        sectionProject: document.getElementById('sectionProject'),
+        projectForm: document.getElementById('projectForm'),
+        projectFormTitle: document.getElementById('projectFormTitle'),
+        projectId: document.getElementById('projectId'),
+        projectTitle: document.getElementById('projectTitle'),
+        projectTagline: document.getElementById('projectTagline'),
+        projectCategory: document.getElementById('projectCategory'),
+        projectTools: document.getElementById('projectTools'),
+        projectGithub: document.getElementById('projectGithub'),
+        projectDate: document.getElementById('projectDate'),
+        projectThumbnail: document.getElementById('projectThumbnail'),
+        projectNote: document.getElementById('projectNote'),
+        deleteProjectBtn: document.getElementById('deleteProjectBtn'),
+        tokenModal: document.getElementById('tokenModal'),
+        tokenModalClose: document.getElementById('tokenModalClose'),
+        tokenInput: document.getElementById('tokenInput'),
+        repoOwnerInput: document.getElementById('repoOwnerInput'),
+        repoNameInput: document.getElementById('repoNameInput'),
+        tokenSaveBtn: document.getElementById('tokenSaveBtn'),
+        toast: document.getElementById('toast')
+    };
+
+    function init() {
+        if (localStorage.getItem('admin_auth') === 'true') {
+            showAdmin();
+        }
+        bindEvents();
+        checkToken();
+    }
+
+    function bindEvents() {
+        els.loginBtn.addEventListener('click', login);
+        els.passwordInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') login();
+        });
+        els.logoutBtn.addEventListener('click', logout);
+
+        els.configTokenBtn.addEventListener('click', function() {
+            var stored = getToken();
+            els.tokenInput.value = stored.token || '';
+            els.repoOwnerInput.value = stored.owner || 'Mr_iFox';
+            els.repoNameInput.value = stored.repo || 'mrifox.github.io';
+            els.tokenModal.classList.add('active');
+        });
+        els.tokenModalClose.addEventListener('click', function() {
+            els.tokenModal.classList.remove('active');
+        });
+        els.tokenModal.addEventListener('click', function(e) {
+            if (e.target === els.tokenModal) els.tokenModal.classList.remove('active');
+        });
+        els.tokenSaveBtn.addEventListener('click', saveToken);
+
+        els.saveBtn.addEventListener('click', saveToGitHub);
+
+        document.querySelectorAll('.sidebar-item').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                switchSection(this.dataset.section);
+            });
+        });
+
+        els.addProjectBtn.addEventListener('click', function() {
+            addNewProject();
+        });
+
+        els.projectForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveProject();
+        });
+        els.deleteProjectBtn.addEventListener('click', function() {
+            deleteProject();
+        });
+
+        els.addToolBtn.addEventListener('click', function() {
+            data.tools.push({ name: '', icon: '' });
+            renderTools();
+            markChanged();
+        });
+
+        els.profileName.addEventListener('input', markChanged);
+        els.profileTagline.addEventListener('input', markChanged);
+        els.profileAbout.addEventListener('input', markChanged);
+    }
+
+    function login() {
+        var pw = els.passwordInput.value.trim();
+        if (pw === ADMIN_PASSWORD) {
+            localStorage.setItem('admin_auth', 'true');
+            showAdmin();
+        } else {
+            els.loginError.textContent = '密码错误，请重试';
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem('admin_auth');
+        els.adminApp.classList.add('hidden');
+        els.loginOverlay.classList.remove('hidden');
+        els.passwordInput.value = '';
+        els.loginError.textContent = '';
+    }
+
+    function showAdmin() {
+        els.loginOverlay.classList.add('hidden');
+        els.adminApp.classList.remove('hidden');
+        loadData();
+    }
+
+    function loadData() {
+        fetch(DATA_PATH + '?t=' + Date.now())
+            .then(function(res) { return res.json(); })
+            .then(function(json) {
+                data = json;
+                renderProfile();
+                renderTools();
+                renderProjectList();
+                if (data.projects.length > 0) {
+                    selectProject(data.projects[0].id);
+                }
+            })
+            .catch(function(err) {
+                showToast('加载数据失败');
+            });
+    }
+
+    function renderProfile() {
+        els.profileName.value = data.profile.name || '';
+        els.profileTagline.value = data.profile.tagline || '';
+        els.profileAbout.value = data.profile.about || '';
+    }
+
+    function renderTools() {
+        els.toolsList.innerHTML = '';
+        data.tools.forEach(function(tool, i) {
+            var item = document.createElement('div');
+            item.className = 'tool-edit-item';
+            item.innerHTML =
+                '<input type="text" placeholder="工具名称" value="' + escapeAttr(tool.name) + '" data-index="' + i + '" data-field="name">' +
+                '<input type="text" placeholder="图标标识" value="' + escapeAttr(tool.icon) + '" data-index="' + i + '" data-field="icon">' +
+                '<button type="button" class="tool-remove-btn" data-index="' + i + '">&times;</button>';
+            els.toolsList.appendChild(item);
+        });
+
+        els.toolsList.querySelectorAll('input').forEach(function(input) {
+            input.addEventListener('input', function() {
+                var idx = parseInt(this.dataset.index);
+                var field = this.dataset.field;
+                data.tools[idx][field] = this.value;
+                markChanged();
+            });
+        });
+
+        els.toolsList.querySelectorAll('.tool-remove-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var idx = parseInt(this.dataset.index);
+                data.tools.splice(idx, 1);
+                renderTools();
+                markChanged();
+            });
+        });
+    }
+
+    function renderProjectList() {
+        els.projectList.innerHTML = '';
+        data.projects.forEach(function(project) {
+            var item = document.createElement('button');
+            item.className = 'project-list-item' + (project.id === editingProjectId ? ' active' : '');
+            item.innerHTML =
+                '<span class="project-list-item-id">#' + project.id + '</span>' +
+                '<span>' + escapeHtml(project.title) + '</span>';
+            item.addEventListener('click', function() {
+                selectProject(project.id);
+            });
+            els.projectList.appendChild(item);
+        });
+    }
+
+    function selectProject(id) {
+        editingProjectId = id;
+        var project = data.projects.find(function(p) { return p.id === id; });
+        if (!project) return;
+
+        els.projectFormTitle.textContent = '编辑项目 #' + id;
+        els.projectId.value = id;
+        els.projectTitle.value = project.title || '';
+        els.projectTagline.value = project.tagline || '';
+        els.projectCategory.value = project.category || '';
+        els.projectTools.value = (project.tools || []).join(', ');
+        els.projectGithub.value = project.github || '';
+        els.projectDate.value = project.date || '';
+        els.projectThumbnail.value = project.thumbnail || '';
+        els.projectNote.value = project.journeyNote || '';
+
+        document.querySelectorAll('.sidebar-item').forEach(function(btn) {
+            btn.classList.remove('active');
+        });
+        switchSection('project');
+        renderProjectList();
+    }
+
+    function addNewProject() {
+        var maxId = 0;
+        data.projects.forEach(function(p) {
+            if (p.id > maxId) maxId = p.id;
+        });
+        var newProject = {
+            id: maxId + 1,
+            title: '新项目',
+            tagline: '',
+            category: '',
+            tools: [],
+            github: '',
+            date: '',
+            thumbnail: '',
+            journeyNote: ''
+        };
+        data.projects.push(newProject);
+        renderProjectList();
+        selectProject(newProject.id);
+        markChanged();
+        showToast('已创建新项目 #' + newProject.id);
+    }
+
+    function saveProject() {
+        var id = parseInt(els.projectId.value);
+        var project = data.projects.find(function(p) { return p.id === id; });
+        if (!project) return;
+
+        project.title = els.projectTitle.value.trim();
+        project.tagline = els.projectTagline.value.trim();
+        project.category = els.projectCategory.value.trim();
+        project.tools = els.projectTools.value.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+        project.github = els.projectGithub.value.trim();
+        project.date = els.projectDate.value.trim();
+        project.thumbnail = els.projectThumbnail.value.trim();
+        project.journeyNote = els.projectNote.value.trim();
+
+        renderProjectList();
+        markChanged();
+        showToast('项目 #' + id + ' 已保存');
+    }
+
+    function deleteProject() {
+        var id = parseInt(els.projectId.value);
+        if (!confirm('确定要删除项目 #' + id + ' 吗？此操作不可撤销。')) return;
+
+        data.projects = data.projects.filter(function(p) { return p.id !== id; });
+        editingProjectId = null;
+        renderProjectList();
+
+        if (data.projects.length > 0) {
+            selectProject(data.projects[0].id);
+        } else {
+            switchSection('profile');
+        }
+        markChanged();
+        showToast('项目 #' + id + ' 已删除');
+    }
+
+    function switchSection(section) {
+        currentSection = section;
+        document.querySelectorAll('.admin-section').forEach(function(el) {
+            el.classList.remove('active');
+        });
+
+        document.querySelectorAll('.sidebar-item').forEach(function(btn) {
+            btn.classList.remove('active');
+            if (btn.dataset.section === section) btn.classList.add('active');
+        });
+
+        if (section === 'profile') {
+            data.profile.name = els.profileName.value.trim();
+            data.profile.tagline = els.profileTagline.value.trim();
+            data.profile.about = els.profileAbout.value.trim();
+            els.sectionProfile.classList.add('active');
+        } else if (section === 'tools') {
+            els.sectionTools.classList.add('active');
+        } else if (section === 'project') {
+            els.sectionProject.classList.add('active');
+        }
+    }
+
+    function markChanged() {
+        hasChanges = true;
+        els.saveBtn.disabled = false;
+    }
+
+    function checkToken() {
+        var stored = getToken();
+        if (stored.token) {
+            els.tokenStatus.textContent = 'Token: 已配置';
+            els.tokenStatus.classList.add('configured');
+        } else {
+            els.tokenStatus.textContent = 'Token: 未配置';
+            els.tokenStatus.classList.remove('configured');
+        }
+    }
+
+    function getToken() {
+        return {
+            token: localStorage.getItem('gh_token') || '',
+            owner: localStorage.getItem('gh_owner') || '',
+            repo: localStorage.getItem('gh_repo') || ''
+        };
+    }
+
+    function saveToken() {
+        var token = els.tokenInput.value.trim();
+        var owner = els.repoOwnerInput.value.trim();
+        var repo = els.repoNameInput.value.trim();
+
+        if (!token || !owner || !repo) {
+            showToast('请填写完整信息');
+            return;
+        }
+
+        localStorage.setItem('gh_token', token);
+        localStorage.setItem('gh_owner', owner);
+        localStorage.setItem('gh_repo', repo);
+
+        els.tokenModal.classList.remove('active');
+        checkToken();
+        showToast('Token 已保存');
+    }
+
+    function saveToGitHub() {
+        var stored = getToken();
+        if (!stored.token) {
+            showToast('请先配置 GitHub Token');
+            els.configTokenBtn.click();
+            return;
+        }
+
+        syncProfileToData();
+        syncToolsToData();
+
+        var jsonStr = JSON.stringify(data, null, 2);
+        var owner = stored.owner;
+        var repo = stored.repo;
+        var path = DATA_PATH;
+
+        els.saveBtn.disabled = true;
+        els.saveBtn.textContent = '提交中...';
+
+        fetch('https://api.github.com/repos/' + owner + '/' + repo + '/contents/' + path, {
+            headers: {
+                'Authorization': 'token ' + stored.token,
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        })
+        .then(function(res) {
+            if (!res.ok) throw new Error('获取文件 SHA 失败');
+            return res.json();
+        })
+        .then(function(fileData) {
+            return fetch('https://api.github.com/repos/' + owner + '/' + repo + '/contents/' + path, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'token ' + stored.token,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/vnd.github.v3+json'
+                },
+                body: JSON.stringify({
+                    message: 'Update projects.json via Admin',
+                    content: btoa(unescape(encodeURIComponent(jsonStr))),
+                    sha: fileData.sha
+                })
+            });
+        })
+        .then(function(res) {
+            if (!res.ok) throw new Error('提交失败');
+            return res.json();
+        })
+        .then(function() {
+            hasChanges = false;
+            els.saveBtn.disabled = false;
+            els.saveBtn.textContent = '保存到 GitHub';
+            showToast('已成功保存到 GitHub');
+        })
+        .catch(function(err) {
+            els.saveBtn.disabled = false;
+            els.saveBtn.textContent = '保存到 GitHub';
+            showToast('保存失败: ' + err.message);
+        });
+    }
+
+    function syncProfileToData() {
+        data.profile.name = els.profileName.value.trim();
+        data.profile.tagline = els.profileTagline.value.trim();
+        data.profile.about = els.profileAbout.value.trim();
+    }
+
+    function syncToolsToData() {
+        var items = els.toolsList.querySelectorAll('.tool-edit-item');
+        var tools = [];
+        items.forEach(function(item) {
+            var inputs = item.querySelectorAll('input');
+            tools.push({
+                name: inputs[0].value.trim(),
+                icon: inputs[1].value.trim()
+            });
+        });
+        data.tools = tools;
+    }
+
+    function showToast(msg) {
+        els.toast.textContent = msg;
+        els.toast.classList.add('show');
+        setTimeout(function() {
+            els.toast.classList.remove('show');
+        }, 3000);
+    }
+
+    function escapeHtml(str) {
+        var div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    function escapeAttr(str) {
+        return (str || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    init();
+})();

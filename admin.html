@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Mr_iFox</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-box">
+            <h2>管理员登录</h2>
+            <p>请输入密码访问管理后台</p>
+            <input type="password" id="passwordInput" placeholder="输入密码" autocomplete="off">
+            <button class="btn btn-primary" id="loginBtn">登录</button>
+            <p class="login-error" id="loginError"></p>
+        </div>
+    </div>
+
+    <div id="adminApp" class="admin-app hidden">
+        <header class="admin-header">
+            <div class="admin-header-left">
+                <a href="index.html" class="logo">Mr_iFox</a>
+                <span class="admin-badge">Admin</span>
+            </div>
+            <div class="admin-header-right">
+                <span class="admin-status" id="tokenStatus">Token: 未配置</span>
+                <button class="btn btn-outline btn-sm" id="configTokenBtn">配置 Token</button>
+                <button class="btn btn-primary btn-sm" id="saveBtn" disabled>保存到 GitHub</button>
+                <button class="btn btn-outline btn-sm" id="logoutBtn">退出</button>
+            </div>
+        </header>
+
+        <div class="admin-layout">
+            <aside class="admin-sidebar">
+                <div class="sidebar-section">
+                    <h3>编辑区域</h3>
+                    <button class="sidebar-item active" data-section="profile">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        个人资料
+                    </button>
+                    <button class="sidebar-item" data-section="tools">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                        AI 工具
+                    </button>
+                </div>
+                <div class="sidebar-section">
+                    <h3>项目列表</h3>
+                    <button class="btn btn-outline btn-full" id="addProjectBtn">+ 新增项目</button>
+                    <div id="projectList" class="project-list"></div>
+                </div>
+            </aside>
+
+            <main class="admin-main">
+                <div id="sectionProfile" class="admin-section active">
+                    <h2>个人资料</h2>
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label for="profileName">姓名</label>
+                            <input type="text" id="profileName" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="profileTagline">一句话简介</label>
+                            <input type="text" id="profileTagline" name="tagline">
+                        </div>
+                        <div class="form-group">
+                            <label for="profileAbout">关于我</label>
+                            <textarea id="profileAbout" name="about" rows="4"></textarea>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="sectionTools" class="admin-section">
+                    <h2>AI 工具管理</h2>
+                    <div id="toolsList" class="tools-edit-list"></div>
+                    <button class="btn btn-outline" id="addToolBtn">+ 添加工具</button>
+                </div>
+
+                <div id="sectionProject" class="admin-section">
+                    <h2 id="projectFormTitle">编辑项目</h2>
+                    <form id="projectForm">
+                        <input type="hidden" id="projectId">
+                        <div class="form-group">
+                            <label for="projectTitle">项目名称</label>
+                            <input type="text" id="projectTitle" name="title">
+                        </div>
+                        <div class="form-group">
+                            <label for="projectTagline">一句话描述</label>
+                            <input type="text" id="projectTagline" name="tagline">
+                        </div>
+                        <div class="form-group">
+                            <label for="projectCategory">分类</label>
+                            <input type="text" id="projectCategory" name="category">
+                        </div>
+                        <div class="form-group">
+                            <label for="projectTools">使用的工具（逗号分隔）</label>
+                            <input type="text" id="projectTools" name="tools">
+                        </div>
+                        <div class="form-group">
+                            <label for="projectGithub">GitHub 链接</label>
+                            <input type="url" id="projectGithub" name="github">
+                        </div>
+                        <div class="form-group">
+                            <label for="projectDate">日期（YYYY-MM）</label>
+                            <input type="text" id="projectDate" name="date" placeholder="2025-01">
+                        </div>
+                        <div class="form-group">
+                            <label for="projectThumbnail">缩略图链接</label>
+                            <input type="url" id="projectThumbnail" name="thumbnail">
+                        </div>
+                        <div class="form-group">
+                            <label for="projectNote">学习感悟</label>
+                            <textarea id="projectNote" name="journeyNote" rows="3"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">保存修改</button>
+                            <button type="button" class="btn btn-danger" id="deleteProjectBtn">删除项目</button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="tokenModal">
+        <div class="modal-content">
+            <button class="modal-close" id="tokenModalClose">&times;</button>
+            <div class="modal-header">
+                <h3 class="modal-title">配置 GitHub Token</h3>
+            </div>
+            <div class="modal-body">
+                <p>请在 GitHub Settings &rarr; Developer Settings &rarr; Personal Access Tokens 中生成一个 Token（只需 repo 权限）。</p>
+                <div class="form-group">
+                    <label for="tokenInput">Personal Access Token</label>
+                    <input type="password" id="tokenInput" placeholder="ghp_xxxx">
+                </div>
+                <div class="form-group">
+                    <label for="repoOwnerInput">仓库拥有者</label>
+                    <input type="text" id="repoOwnerInput" placeholder="Mr_iFox">
+                </div>
+                <div class="form-group">
+                    <label for="repoNameInput">仓库名</label>
+                    <input type="text" id="repoNameInput" placeholder="mrifox.github.io">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="tokenSaveBtn">保存 Token</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
