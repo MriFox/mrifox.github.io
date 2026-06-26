@@ -17,40 +17,16 @@ const ThemeManager = {
         }
 
         const btn = this.toggle;
-        const rect = btn.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-        const maxDist = Math.sqrt(
-            Math.max(cx, window.innerWidth - cx) ** 2 +
-            Math.max(cy, window.innerHeight - cy) ** 2
-        ) * 1.5;
+        btn.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        btn.style.opacity = '0';
+        btn.style.transform = 'rotate(90deg)';
 
-        const overlay = document.createElement('div');
-        overlay.style.cssText = `
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 9998;
-            clip-path: circle(0px at ${cx}px ${cy}px);
-            transition: clip-path 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            background: ${this.theme === 'light' ? 'var(--color-bg)' : 'var(--color-bg)'};
-        `;
-        document.body.appendChild(overlay);
-
-        this.theme = this.theme === 'light' ? 'dark' : 'light';
-        this.apply(this.theme);
-
-        overlay.style.background = getComputedStyle(document.documentElement).getPropertyValue('--color-bg').trim();
-
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                overlay.style.clipPath = `circle(${maxDist}px at ${cx}px ${cy}px)`;
-            });
-        });
-
-        overlay.addEventListener('transitionend', () => {
-            overlay.remove();
-        }, { once: true });
-
-        setTimeout(() => overlay.remove(), 700);
+        setTimeout(() => {
+            this.theme = this.theme === 'light' ? 'dark' : 'light';
+            this.apply(this.theme);
+            btn.style.opacity = '1';
+            btn.style.transform = 'rotate(0deg)';
+        }, 300);
     }
 };
 
