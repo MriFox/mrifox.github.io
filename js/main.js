@@ -24,7 +24,7 @@ function renderProfile() {
     const { name, tagline, about } = appData.profile;
     document.getElementById('profileName').textContent = name;
     document.getElementById('profileTagline').textContent = tagline;
-    document.getElementById('profileAbout').textContent = about;
+    document.getElementById('profileAbout').innerHTML = about.replace(/\n/g, '<br>');
 }
 
 function renderTimeline() {
@@ -46,7 +46,7 @@ function renderWorks() {
     const container = document.getElementById('worksGrid');
     
     container.innerHTML = appData.projects.map(project => `
-        <div class="card" onclick="window.open('${project.github}', '_blank')">
+        <div class="card work-card" data-github="${project.github}">
             <div class="card-title">${project.title}</div>
             <div class="card-tagline">${project.tagline}</div>
             <div class="card-meta">
@@ -55,6 +55,14 @@ function renderWorks() {
             </div>
         </div>
     `).join('');
+    
+    container.addEventListener('click', (e) => {
+        const card = e.target.closest('.work-card');
+        if (card) {
+            const github = card.dataset.github;
+            if (github) window.open(github, '_blank');
+        }
+    });
 }
 
 function renderTools() {
@@ -84,27 +92,52 @@ function initMobileMenu() {
     btn.addEventListener('click', () => {
         btn.classList.toggle('active');
         links.classList.toggle('active');
+        btn.setAttribute('aria-expanded', links.classList.contains('active'));
     });
 
     links.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
             btn.classList.remove('active');
             links.classList.remove('active');
+            btn.setAttribute('aria-expanded', 'false');
         });
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!btn.contains(e.target) && !links.contains(e.target)) {
+            btn.classList.remove('active');
+            links.classList.remove('active');
+            btn.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && links.classList.contains('active')) {
+            btn.classList.remove('active');
+            links.classList.remove('active');
+            btn.setAttribute('aria-expanded', 'false');
+        }
     });
 }
 
 function initScrollNav() {
     const nav = document.getElementById('navbar');
     let lastScroll = 0;
+    let ticking = false;
     
     window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
-        if (currentScroll > lastScroll && currentScroll > 100) {
-            nav.classList.add('hide');
-        } else {
-            nav.classList.remove('hide');
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                const currentScroll = window.pageYOffset;
+                if (currentScroll > lastScroll && currentScroll > 100) {
+                    nav.classList.add('hide');
+                } else {
+                    nav.classList.remove('hide');
+                }
+                lastScroll = currentScroll;
+                ticking = false;
+            });
+            ticking = true;
         }
-        lastScroll = currentScroll;
     });
 }

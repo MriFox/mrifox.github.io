@@ -5,7 +5,7 @@
 ## 技术栈
 
 - HTML5
-- CSS3 (自定义属性、backdrop-filter、scroll-snap)
+- CSS3 (自定义属性、响应式设计)
 - Vanilla JavaScript
 - marked.js (Markdown 渲染)
 
