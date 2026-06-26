@@ -1,26 +1,89 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mr_iFox 个人博客 - 用 AI 把想法变成现实，记录 AI 小白从零开始的学习历程">
     <title>Mr_iFox - 用 AI 把想法变成现实</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-        <h1>Mr_iFox</h1>
-        <p>用 AI 把想法变成现实</p>
+    <nav id="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">Mr_iFox</a>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="菜单">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#about">关于</a></li>
+                <li><a href="#journey">学习历程</a></li>
+                <li><a href="#works">作品</a></li>
+                <li><a href="#tools">工具</a></li>
+            </ul>
+            <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <header id="hero">
+        <div class="container hero-content">
+            <h1 id="profileName">Mr_iFox</h1>
+            <p class="tagline" id="profileTagline">用 AI 把想法变成现实</p>
+        </div>
     </header>
+
     <main>
         <section id="about">
-            <h2>关于我</h2>
-            <p>我是 Fox，一个正在用 AI 把想法变成现实的探索者。</p>
+            <div class="container">
+                <h2>关于我</h2>
+                <p id="profileAbout">我是 Fox，一个正在用 AI 把想法变成现实的探索者。</p>
+            </div>
         </section>
-        <section id="projects">
-            <h2>我的项目</h2>
-            <div id="project-list"></div>
+
+        <section id="journey">
+            <div class="container">
+                <h2>学习历程</h2>
+                <div class="timeline" id="timeline"></div>
+            </div>
+        </section>
+
+        <section id="works">
+            <div class="container">
+                <h2>我的作品</h2>
+                <div class="works-grid" id="worksGrid"></div>
+            </div>
+        </section>
+
+        <section id="tools">
+            <div class="container">
+                <h2>我的工具</h2>
+                <div class="tools-grid" id="toolsGrid"></div>
+            </div>
         </section>
     </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Mr_iFox. 用 AI 把想法变成现实。</p>
+        </div>
+    </footer>
+
     <script src="js/theme.js"></script>
     <script src="js/main.js"></script>
 </body>
