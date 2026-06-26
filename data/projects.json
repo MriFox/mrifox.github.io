@@ -1,0 +1,71 @@
+{
+  "profile": {
+    "name": "Mr_iFox",
+    "tagline": "用 AI 把想法变成现实",
+    "about": "我是 Fox，一个正在用 AI 把想法变成现实的探索者。\n这里记录我从零开始，一步步用 AI 工具做出真实产品的过程。\n每次项目都是一次学习，不完美，但真实。"
+  },
+  "tools": [
+    { "name": "ChatGPT", "icon": "chatgpt" },
+    { "name": "Claude", "icon": "claude" },
+    { "name": "Cursor", "icon": "cursor" },
+    { "name": "GitHub", "icon": "github" },
+    { "name": "VS Code", "icon": "vscode" }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "title": "基金投资分析网页",
+      "tagline": "一句话描述，待站长填写",
+      "category": "Web App",
+      "tools": ["ChatGPT"],
+      "github": "https://github.com/Mr_iFox/项目仓库名",
+      "date": "2025-01",
+      "thumbnail": "",
+      "journeyNote": "一句话学习感悟，待站长填写"
+    },
+    {
+      "id": 2,
+      "title": "基金回本测算工具",
+      "tagline": "待填写",
+      "category": "工具",
+      "tools": ["ChatGPT"],
+      "github": "https://github.com/Mr_iFox/项目仓库名",
+      "date": "2025-02",
+      "thumbnail": "",
+      "journeyNote": "待填写"
+    },
+    {
+      "id": 3,
+      "title": "羊了个羊小游戏（模仿）",
+      "tagline": "待填写",
+      "category": "游戏",
+      "tools": ["ChatGPT"],
+      "github": "https://github.com/Mr_iFox/项目仓库名",
+      "date": "2025-03",
+      "thumbnail": "",
+      "journeyNote": "待填写"
+    },
+    {
+      "id": 4,
+      "title": "小米 mini code 教程网页",
+      "tagline": "待填写",
+      "category": "教程",
+      "tools": ["ChatGPT"],
+      "github": "https://github.com/Mr_iFox/项目仓库名",
+      "date": "2025-04",
+      "thumbnail": "",
+      "journeyNote": "待填写"
+    },
+    {
+      "id": 5,
+      "title": "Git 和 GitHub 科普教程网页",
+      "tagline": "待填写",
+      "category": "教程",
+      "tools": ["ChatGPT"],
+      "github": "https://github.com/Mr_iFox/项目仓库名",
+      "date": "2025-05",
+      "thumbnail": "",
+      "journeyNote": "待填写"
+    }
+  ]
+}
