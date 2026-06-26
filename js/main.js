@@ -80,13 +80,17 @@ function formatDate(dateStr) {
 function initMobileMenu() {
     const btn = document.getElementById('mobileMenuBtn');
     const links = document.getElementById('navLinks');
-    
+
     btn.addEventListener('click', () => {
+        btn.classList.toggle('active');
         links.classList.toggle('active');
     });
-    
+
     links.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => links.classList.remove('active'));
+        link.addEventListener('click', () => {
+            btn.classList.remove('active');
+            links.classList.remove('active');
+        });
     });
 }
 
