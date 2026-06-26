@@ -332,13 +332,6 @@ async function loadReadme(githubUrl, container) {
         readmeCache[cacheKey] = content;
         renderReadme(content, container);
     } catch (error) {
-        container.innerHTML = '<div class="modal-readme-content"><p>加载 README 失败</p></div>';
-    }
-        const data = await response.json();
-        const content = atob(data.content.replace(/\n/g, ''));
-        readmeCache[cacheKey] = content;
-        renderReadme(content, container);
-    } catch (error) {
         container.innerHTML = '<div class="modal-readme-content"><p>暂无 README 内容</p></div>';
     }
 }
