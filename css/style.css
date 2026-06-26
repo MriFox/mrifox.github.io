@@ -196,8 +196,8 @@ nav.hide {
 
 #hero {
     position: relative;
-    height: 70vh;
-    min-height: 400px;
+    height: 45vh;
+    min-height: 320px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -240,30 +240,30 @@ nav.hide {
 }
 
 .hero-content h1 {
-    font-size: 3.5rem;
+    font-size: 2.5rem;
     font-weight: 700;
-    margin-bottom: 0.5rem;
-    letter-spacing: 3px;
+    margin-bottom: 0.3rem;
+    letter-spacing: 2px;
     text-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
 }
 
 .hero-content .tagline {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
 }
 
 .hero-divider {
-    width: 60px;
+    width: 40px;
     height: 2px;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
-    margin: 0 auto 2rem;
+    margin: 0 auto 1rem;
 }
 
 .hero-about {
-    font-size: 1.05rem;
-    line-height: 1.9;
+    font-size: 0.95rem;
+    line-height: 1.7;
     color: rgba(255, 255, 255, 0.85);
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
 }
@@ -592,20 +592,21 @@ footer {
     }
 
     #hero {
-        height: 60vh;
-        min-height: 350px;
+        height: 40vh;
+        min-height: 280px;
     }
 
     .hero-content h1 {
-        font-size: 2.2rem;
+        font-size: 1.8rem;
     }
 
     .hero-content .tagline {
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 
     .hero-about {
-        font-size: 0.95rem;
+        font-size: 0.85rem;
+        line-height: 1.5;
     }
 
     h2 {
