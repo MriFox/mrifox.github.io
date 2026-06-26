@@ -435,6 +435,12 @@ footer {
 }
 
 @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
     html {
         scroll-snap-type: none;
     }
@@ -442,7 +448,7 @@ footer {
         display: none;
     }
     .work-card {
-        transition: box-shadow var(--transition);
+        transition: none;
     }
     .work-card:hover {
         transform: none;
@@ -452,6 +458,16 @@ footer {
     }
     [data-parallax] {
         transform: none !important;
+    }
+    .modal-content {
+        transform: none;
+        transition: none;
+    }
+    nav {
+        transition: background-color 0.01ms;
+    }
+    .card {
+        transition: none;
     }
 }
 
