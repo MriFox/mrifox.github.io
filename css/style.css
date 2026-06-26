@@ -592,6 +592,10 @@ footer {
         display: flex;
     }
 
+    html {
+        scroll-snap-type: none;
+    }
+
     #hero {
         height: 40vh;
         min-height: 280px;
@@ -826,6 +830,7 @@ footer {
     padding: 1.25rem 1.5rem;
     display: flex;
     justify-content: center;
+    gap: 1rem;
 }
 
 @media (max-width: 768px) {

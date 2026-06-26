@@ -41,6 +41,7 @@
         projectCategory: document.getElementById('projectCategory'),
         projectTools: document.getElementById('projectTools'),
         projectGithub: document.getElementById('projectGithub'),
+        projectUrl: document.getElementById('projectUrl'),
         projectDate: document.getElementById('projectDate'),
         projectThumbnail: document.getElementById('projectThumbnail'),
         projectThumbnailInput: document.getElementById('projectThumbnailInput'),
@@ -225,9 +226,9 @@
                 "about": "我是 Fox，一个正在用 AI 把想法变成现实的探索者。\n这里记录我从零开始，一步步用 AI 工具做出真实产品的过程。\n每次项目都是一次学习，不完美，但真实。"
             },
             "tools": [
-                { "name": "MiMo Chat", "icon": "mimo-chat.png" },
-                { "name": "MiMo Code", "icon": "mimo-code.png" },
-                { "name": "GitHub", "icon": "github.png" }
+                { "name": "MiMo Chat", "icon": "mimo-chat.png", "url": "https://aistudio.xiaomimimo.com" },
+                { "name": "MiMo Code", "icon": "mimo-code.png", "url": "https://mimo.xiaomi.com/coder" },
+                { "name": "GitHub", "icon": "github.png", "url": "https://github.com" }
             ],
             "projects": [
                 {
@@ -364,6 +365,7 @@
         els.projectCategory.value = project.category || '';
         els.projectTools.value = (project.tools || []).join(', ');
         els.projectGithub.value = project.github || '';
+        els.projectUrl.value = project.url || '';
         els.projectDate.value = project.date || '';
         els.projectThumbnail.value = project.thumbnail || '';
         els.projectNote.value = project.journeyNote || '';
@@ -426,6 +428,7 @@
         project.category = els.projectCategory.value.trim();
         project.tools = els.projectTools.value.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
         project.github = els.projectGithub.value.trim();
+        project.url = els.projectUrl.value.trim();
         project.date = els.projectDate.value.trim();
         project.thumbnail = els.projectThumbnail.value.trim();
         project.journeyNote = els.projectNote.value.trim();

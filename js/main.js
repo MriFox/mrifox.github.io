@@ -14,13 +14,26 @@ const fallbackData = {
   ],
   "projects": [
     {
+      "id": 6,
+      "title": "个人博客网站",
+      "tagline": "首次制作个人博客网站",
+      "category": "博客",
+      "tools": ["MiMo Code"],
+      "github": "https://github.com/MriFox/mrifox.github.io",
+      "url": "https://mrifox.github.io/",
+      "date": "2026-06-26",
+      "thumbnail": "assets/thumbnails/project1.svg",
+      "journeyNote": "AI项目逐渐开始做大"
+    },
+    {
       "id": 1,
       "title": "Git 和 GitHub 科普教程",
       "tagline": "给新手看的Git入门指南",
       "category": "教程",
       "tools": ["MiMo Code"],
       "github": "https://github.com/Mr_iFox/git-tutorial",
-      "date": "2025-05",
+      "url": "https://mrifox.github.io/git-tutorial/",
+      "date": "2026-06-24",
       "thumbnail": "assets/thumbnails/project1.svg",
       "journeyNote": "边学边教，把Git知识整理成网页，也巩固了自己的理解"
     },
@@ -31,6 +44,7 @@ const fallbackData = {
       "category": "教程",
       "tools": ["MiMo Code"],
       "github": "https://github.com/Mr_iFox/mimo-tutorial",
+      "url": "https://mrifox.github.io/mimo-tutorial/",
       "date": "2025-04",
       "thumbnail": "assets/thumbnails/project2.svg",
       "journeyNote": "第一次用MiMo Code做项目，体验比ChatGPT更流畅"
@@ -42,6 +56,7 @@ const fallbackData = {
       "category": "游戏",
       "tools": ["ChatGPT"],
       "github": "",
+      "url": "",
       "date": "2025-03",
       "thumbnail": "assets/thumbnails/project3.svg",
       "journeyNote": "从静态页面到交互游戏，感受到了AI辅助开发的效率"
@@ -53,6 +68,7 @@ const fallbackData = {
       "category": "工具",
       "tools": ["ChatGPT"],
       "github": "",
+      "url": "",
       "date": "2025-02",
       "thumbnail": "assets/thumbnails/project4.svg",
       "journeyNote": "开始理解如何把需求转化成代码，AI让我少走了很多弯路"
@@ -64,6 +80,7 @@ const fallbackData = {
       "category": "Web App",
       "tools": ["ChatGPT"],
       "github": "",
+      "url": "",
       "date": "2025-01",
       "thumbnail": "assets/thumbnails/project5.svg",
       "journeyNote": "第一次尝试用AI写代码，虽然简陋，但迈出了第一步"
@@ -256,11 +273,25 @@ function openModal(project) {
     const tools = document.getElementById('modalTools');
     const readme = document.getElementById('modalReadme');
     const github = document.getElementById('modalGithub');
+    const url = document.getElementById('modalUrl');
 
     title.textContent = project.title;
     tags.innerHTML = `<span class="tag">${project.category}</span>`;
     tools.textContent = project.tools.join(', ');
-    github.href = project.github;
+
+    if (project.url) {
+        url.href = project.url;
+        url.style.display = 'inline-flex';
+    } else {
+        url.style.display = 'none';
+    }
+
+    if (project.github) {
+        github.href = project.github;
+        github.style.display = 'inline-flex';
+    } else {
+        github.style.display = 'none';
+    }
 
     readme.innerHTML = '<div class="modal-loading">加载 README 中...</div>';
     overlay.classList.add('active');
