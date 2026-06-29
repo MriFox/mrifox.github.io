@@ -1,5 +1,6 @@
 (function() {
-    const ADMIN_PASSWORD = 'mrifox2025';
+    // 密码哈希（SHA-256），避免明文存储
+    const ADMIN_PASSWORD_HASH = '7c0a41af8c654b963ce57180e32ef481165b0bca1c5da547d53b8cc867bdd89c';
     const DATA_PATH = 'data/projects.json';
 
     let data = null;
@@ -168,14 +169,28 @@
         els.profileAbout.addEventListener('input', markChanged);
     }
 
-    function login() {
+    async function hashPassword(password) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function login() {
         var pw = els.passwordInput.value.trim();
-        if (pw === ADMIN_PASSWORD) {
+        if (!pw) {
+            els.loginError.textContent = '请输入密码';
+            return;
+        }
+        const hash = await hashPassword(pw);
+        if (hash === ADMIN_PASSWORD_HASH) {
             localStorage.setItem('admin_auth', 'true');
             showAdmin();
         } else {
-            els.loginError.textContent = '密码错误，请重试';
+            els.loginError.textContent = '密码错误';
         }
+    }
     }
 
     function logout() {
