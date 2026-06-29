@@ -338,7 +338,9 @@ async function loadReadme(githubUrl, container) {
 
 function renderReadme(markdown, container) {
     if (typeof marked !== 'undefined') {
-        container.innerHTML = `<div class="modal-readme-content">${marked.parse(markdown)}</div>`;
+        const rawHtml = marked.parse(markdown);
+        const cleanHtml = typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(rawHtml) : rawHtml;
+        container.innerHTML = `<div class="modal-readme-content">${cleanHtml}</div>`;
     } else {
         container.innerHTML = `<div class="modal-readme-content"><pre>${markdown}</pre></div>`;
     }

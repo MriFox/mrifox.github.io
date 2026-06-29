@@ -600,7 +600,8 @@
             var inputs = item.querySelectorAll('input');
             tools.push({
                 name: inputs[0].value.trim(),
-                icon: inputs[1].value.trim()
+                icon: inputs[1].value.trim(),
+                url: inputs[2] ? inputs[2].value.trim() : ''
             });
         });
         data.tools = tools;
